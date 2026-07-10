@@ -52,3 +52,16 @@ app.*.map.json
 gitleaks_report.json
 *.zip
 *_dump.txt
+
+# Python & Backend
+venv/
+.venv/
+apps/api/venv/
+apps/api/.venv/
+apps/api/.env
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/

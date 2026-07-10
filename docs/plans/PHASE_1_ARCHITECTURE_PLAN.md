@@ -3,7 +3,7 @@
 **Date:** July 6, 2026  
 **Project:** Nova AI Commercial MVP  
 **Baseline Git Commit:** `dad713a28d48a68c8dbc50ab317a531a30674ffc`  
-**Status:** **PROPOSED (Waiting for User Approval)**
+**Status:** **PHASE 1A IMPLEMENTED & VERIFIED (Waiting for User Review before Phase 1B)**
 
 ---
 
@@ -22,7 +22,7 @@
 ## B. Proposed Phase 1 Architecture
 Phase 1 transforms Nova AI from a local, simulated client into a production-grade, multi-tenant Digital Human platform:
 - **Client Application:** Flutter + Riverpod + GoRouter. Replaces SharedPreferences with `flutter_secure_storage` for storing ephemeral user session tokens. Communicates exclusively via REST (`NovaApiService` using Dio/HTTP) to the backend gateway.
-- **Backend Gateway:** FastAPI with Python 3.11+ running in an async monorepo subdirectory (`apps/api/`). Orchestrates AI provider calls, Pydantic schema validation, Server-Sent Events (SSE) streaming chat, and JWT authentication middleware.
+- **Backend Gateway:** FastAPI with Python `>=3.11,<3.14` (verified on Python 3.13.7) running in an async monorepo subdirectory (`apps/api/`). Orchestrates AI provider calls, Pydantic schema validation, Server-Sent Events (SSE) streaming chat, and JWT authentication middleware.
 - **Primary Database:** PostgreSQL 15+ with `pgvector` extension hosted on Supabase (or running in local Docker for offline dev).
 - **Migration Engine:** Alembic with async SQLAlchemy 2.0 (`asyncpg` driver) for declarative schema evolution.
 - **Authentication Gateway:** Firebase Authentication (Anonymous onboarding, Google/Apple Sign-In). Issuing Firebase ID tokens (JWTs) verified on every API request by FastAPI middleware using `firebase-admin`.
@@ -289,10 +289,11 @@ Phase 1 execution will be verified against Criteria 1.1 through 1.28 as defined 
      git clean -fd
      ```
 2. **Database Schema Rollback:**
-   - Every Alembic migration includes an explicit `downgrade()` method. To roll back a database migration:
+   - In local development and disposable test environments, every Alembic migration includes an explicit `downgrade()` method that can be rolled back using:
      ```bash
      alembic downgrade -1
      ```
+   - **Production Rollback Policy:** In staging and production environments, `alembic downgrade` is **strictly forbidden** as a routine rollback mechanism due to irreversible data loss risks. Production schema management must default to: backward-compatible migrations, expand/migrate/contract strategy, mandatory backups before risky migrations, forward-fix corrective migrations, and explicit reviewed rollback procedures.
 
 ---
 
