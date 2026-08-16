@@ -59,6 +59,8 @@ def setup_logging(debug: bool = False) -> None:
     console_handler = logging.StreamHandler()
     console_handler.setFormatter(StructuredJsonFormatter())
     root_logger.addHandler(console_handler)
+    logging.getLogger("aiosqlite").setLevel(logging.WARNING)
+    logging.getLogger("sqlalchemy.engine").setLevel(logging.WARNING)
 
 class CorrelationIdMiddleware(BaseHTTPMiddleware):
     """

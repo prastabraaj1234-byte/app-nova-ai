@@ -38,9 +38,11 @@ class Settings(BaseSettings):
         description="Comma-separated list of allowed CORS origins"
     )
 
-    # Future Phase Placeholders (Optional in Phase 1A)
-    GEMINI_API_KEY: str = Field(default="", description="Google Gemini API Key placeholder")
+    # Auth & AI Configuration
+    AUTH_DEV_MODE: bool = Field(default=True, description="Enable local dev token verification ('dev-token:uid')")
     FIREBASE_PROJECT_ID: str = Field(default="", description="Firebase Project ID placeholder")
+    FIREBASE_CREDENTIALS_PATH: str = Field(default="", description="Local path to Firebase Service Account JSON")
+    GEMINI_API_KEY: str = Field(default="", description="Google Gemini API Key placeholder")
 
     @property
     def cors_origins_list(self) -> List[str]:

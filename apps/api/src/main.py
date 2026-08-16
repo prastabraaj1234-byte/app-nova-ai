@@ -110,7 +110,9 @@ def create_app() -> FastAPI:
     register_exception_handlers(app)
 
     # Register routers
+    from src.routers.users import router as users_router
     app.include_router(health_router)
+    app.include_router(users_router)
 
     return app
 

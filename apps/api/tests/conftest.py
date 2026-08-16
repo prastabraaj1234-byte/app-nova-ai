@@ -58,3 +58,9 @@ async def async_client() -> AsyncGenerator[AsyncClient, None]:
     transport = ASGITransport(app=app, raise_app_exceptions=False)
     async with AsyncClient(transport=transport, base_url="http://testserver") as client:
         yield client
+
+@pytest_asyncio.fixture(scope="function")
+async def db_session() -> AsyncGenerator[AsyncSession, None]:
+    """Yield an active async SQLAlchemy database session for testing."""
+    async with TestSessionLocal() as session:
+        yield session
